@@ -1,0 +1,29 @@
+{
+	"name": "fcc-exercise-tracker",
+	"version": "1.0.0",
+	"description": "freeCodeCamp APIs and Microservices Project 4 - Exercise Tracker",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js",
+		"dev": "nodemon server.js"
+	},
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^8.2.0",
+		"express": "^4.16.4",
+		"express-validator": "^6.12.0",
+		"mongodb": "^3.6.8",
+		"mongoose": "^5.13.2"
+	},
+	"repository": {
+		"url": "https://github.com/santi-diazl/fcc-exercise-tracker"
+	},
+	"license": "MIT",
+	"keywords": [
+		"node",
+		"express"
+	],
+	"devDependencies": {
+		"nodemon": "^2.0.12"
+	}
+}
