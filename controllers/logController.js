@@ -10,4 +10,61 @@ const User = require("../models/user");
 
 // You can add from, to and limit parameters to a /api/users/:_id/logs request
 // to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format. limit is an integer of how many logs to send back.
-exports.getUserLog = (req, res, next) => {};
+// GET user's exercise log: GET /api/users/:_id/logs?[&from][&to][&limit]
+// [ ] = optional
+// from, to = dates (yyyy-mm-dd); limit = number
+exports.getUserLog = (req, res, next) => {
+  User.findById(req.params["_id"], (err, user) => {
+    if (err) return next(err);
+    const { limit, from, to } = req.query;
+    console.log(`from: ${from}, to: ${to}`);
+    // convert to UTC string if valid date
+    let fromTime =
+      new Date(from).toString() === "Invalid Date"
+        ? ""
+        : new Date(from).toUTCString();
+    let toTime =
+      new Date(to).toString() === "Invalid Date"
+        ? ""
+        : new Date(to).toUTCString();
+
+    console.log(`from: ${fromTime}, to: ${toTime}`);
+
+    // filter object for query
+    const filter = { user: user._id };
+
+    if (fromTime) {
+      filter.date = {};
+      filter.date["$gte"] = fromTime;
+    }
+    if (toTime) {
+      if (filter.hasOwnProperty("date")) {
+        filter.date["$lte"] = toTime;
+      } else {
+        filter.date = {};
+        filter.date["$lte"] = toTime;
+      }
+    }
+
+    console.log(filter);
+
+    Exercise.find(filter, "description duration date")
+      .limit(Number(limit))
+      .exec((err, exercises) => {
+        if (err) return next(err);
+        const exerciseArr = Array.from(exercises).map((exercise) => {
+          return {
+            description: exercise.description,
+            duration: exercise.duration,
+            date: exercise.date_string,
+          };
+        });
+        res.json({
+          _id: user._id,
+          username: user.username,
+          count: exerciseArr.length,
+          log: exerciseArr,
+        });
+      });
+  });
+};

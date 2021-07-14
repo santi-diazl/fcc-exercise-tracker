@@ -7,11 +7,14 @@ const userController = require("./controllers/userController");
 const logController = require("./controllers/logController");
 
 // GET - user list
-router.get("/api/users", userController.getUserList);
+router.get("/", userController.getUserList);
 // POST - new user
-router.post("/api/users", userController.addNewUser);
+router.post("/", userController.addNewUser);
 
 // POST - new exercise
-router.post("/api/users/:_id/exercises", exerciseController.addNewExercise);
+router.post("/:_id/exercises", exerciseController.addNewExercise);
+
+// GET - exercise log
+router.get("/:_id/logs", logController.getUserLog);
 
 module.exports = router;

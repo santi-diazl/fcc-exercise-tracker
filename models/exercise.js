@@ -9,10 +9,13 @@ const ExerciseSchema = new Schema({
   date: { type: Date, default: Date.now },
 });
 
-/*
-ExerciseSchema.virtual('count').get(function () {
-  
+ExerciseSchema.virtual("date_string").get(function () {
+  const date = this.date.toDateString();
+  return date;
 });
-*/
+
+ExerciseSchema.virtual("time_ms").get(function () {
+  return this.date.getTime();
+});
 
 module.exports = mongoose.model("Exercise", ExerciseSchema);

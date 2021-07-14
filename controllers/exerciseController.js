@@ -56,7 +56,7 @@ exports.addNewExercise = [
         res.json({
           _id: exercise.user._id,
           username: user.username,
-          date: exercise.date,
+          date: exercise.date_string,
           duration: exercise.duration,
           description: exercise.description,
         });
