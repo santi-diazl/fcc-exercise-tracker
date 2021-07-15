@@ -34,5 +34,4 @@ exports.getUserList = (req, res, next) => {
   User.find({}, "username _id", (err, data) => {
     if (err) return console.error(err);
     res.json(Array.from(data));
-  });
 };
