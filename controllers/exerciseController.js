@@ -16,6 +16,8 @@ exports.addNewExercise = [
       date: !req.body.date ? undefined : req.body.date,
     });
 
+    console.log(`exercise information: ${exercise}`);
+
     User.findById(req.body[":_id"], (err, user) => {
       if (err) return next(err);
       if (!user) {
