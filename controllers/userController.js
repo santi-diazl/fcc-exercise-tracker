@@ -1,9 +1,5 @@
 // require mongoose models
-const Exercise = require("../models/exercise");
 const User = require("../models/user");
-
-// require express validator
-const { body, validationResult } = require("express-validator");
 
 // You can POST to /api/users with form data username to create a new user.
 // The returned response will be an object with username and _id properties.
@@ -15,7 +11,7 @@ exports.addNewUser = (req, res, next) => {
     newUser.save((err, user) => {
       if (err) return console.error(err);
       res.json({username: user.username, _id: user._id.toString()});
-      console.log(`New user created was ${user}`);
+      // console.log(`New user created was ${user}`);
     });
   };
 

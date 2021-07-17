@@ -9,6 +9,7 @@ const User = require("../models/user");
 exports.addNewExercise = [
   // process request
   (req, res, next) => {
+    // console.log(`User ID entered was ${req.body[":_id"]}`)
     const exercise = new Exercise({
       user: req.body[":_id"],
       description: req.body.description,
@@ -16,7 +17,7 @@ exports.addNewExercise = [
       date: !req.body.date ? undefined : req.body.date,
     });
 
-    console.log(`exercise information: ${exercise}, entered at ${new Date().toLocaleTimeString()}`);
+    // console.log(`exercise information: ${exercise}, entered at ${new Date().toLocaleTimeString()}`);
 
     User.findById(req.body[":_id"], (err, user) => {
       if (err) return next(err);
@@ -25,7 +26,7 @@ exports.addNewExercise = [
         err.status = 404;
         return next(err);
       }
-      console.log(`User found and was ${user._id} and ${user.username}`)
+      // console.log(`User found and was ${user._id} and ${user.username}`)
       // now we can save exercise document
       exercise.save((err, exercise) => {
         if (err) {
