@@ -21,7 +21,7 @@ exports.addNewExercise = [
     User.findById(req.body[":_id"], (err, user) => {
       if (err) return next(err);
       if (!user) {
-        let err = new Error("User not found.");
+        let err = new Error(`User ${req.body[":_id"]} not found.`);
         err.status = 404;
         return next(err);
       }
