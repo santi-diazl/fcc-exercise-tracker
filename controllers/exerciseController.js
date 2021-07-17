@@ -9,13 +9,13 @@ const User = require("../models/user");
 exports.addNewExercise = [
   // process request
   (req, res, next) => {
-    const _id = req.body._id;
-    console.log(`User ID entered was ${_id}, ${req.body.description}, ${req.body.duration}`)
+    const _id = req.params._id;
+    console.log(`User ID entered was ${_id}, desc: ${req.body.description}, duration: ${req.body.duration}`)
     
     User.findById(_id, (err, user) => {
       if (err) return next(err);
       if (!user) {
-        let err = new Error(`User ${req.body._id} not found.`);
+        let err = new Error(`User ${_id} not found.`);
         err.status = 404;
         return next(err);
       }
