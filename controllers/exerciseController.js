@@ -10,7 +10,7 @@ exports.addNewExercise = [
   // process request
   (req, res, next) => {
     const _id = req.body._id;
-    console.log(`User ID entered was ${_id}`)
+    console.log(`User ID entered was ${_id}, ${req.body.description}, ${req.body.duration}`)
     
     User.findById(_id, (err, user) => {
       if (err) return next(err);
