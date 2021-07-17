@@ -20,9 +20,10 @@ exports.addNewUser = [
     const newUser = new User({
       username: req.body.username,
     });
-    newUser.save((err, data) => {
+    newUser.save((err, user) => {
       if (err) return console.error(err);
-      res.json({ _id: data._id, username: data.username });
+      res.json(user);
+      console.log(`New user created was ${user}`);
     });
   },
 ];

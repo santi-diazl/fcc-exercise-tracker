@@ -14,8 +14,8 @@ ExerciseSchema.virtual("date_string").get(function () {
   return date;
 });
 
-ExerciseSchema.virtual("time_ms").get(function () {
-  return this.date.getTime();
+ExerciseSchema.virtual("time_entered").get(function () {
+  return new Date().toLocaleTimeString();
 });
 
 module.exports = mongoose.model("Exercise", ExerciseSchema);

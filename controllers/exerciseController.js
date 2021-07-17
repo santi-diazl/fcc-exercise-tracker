@@ -16,7 +16,7 @@ exports.addNewExercise = [
       date: !req.body.date ? undefined : req.body.date,
     });
 
-    console.log(`exercise information: ${exercise}`);
+    console.log(`exercise information: ${exercise}, entered at ${new Date().toLocaleTimeString()}`);
 
     User.findById(req.body[":_id"], (err, user) => {
       if (err) return next(err);
@@ -25,13 +25,14 @@ exports.addNewExercise = [
         err.status = 404;
         return next(err);
       }
+      console.log(`User found and was ${user._id} and ${user.username}`)
       // now we can save exercise document
       exercise.save((err, exercise) => {
         if (err) {
           return next(err);
         }
         res.json({
-          _id: exercise.user._id,
+          _id: user._id,
           username: user.username,
           date: exercise.date_string,
           duration: exercise.duration,
