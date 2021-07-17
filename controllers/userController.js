@@ -5,13 +5,13 @@ const User = require("../models/user");
 // The returned response will be an object with username and _id properties.
 // Handle new user request on POST
 exports.addNewUser = (req, res, next) => {
-    console.log(`User entered was ${req.body.username}`)
+    console.log(`User ID entered was ${req.body.username}`)
     const newUser = new User({
       username: req.body.username,
     });
     newUser.save((err, user) => {
       if (err) return console.error(err);
-      console.log(`New user created was ${user}`);
+      console.log(`New user created: ${user}`);
       res.json({username: user.username, _id: user._id.toString()})
     });
   };
