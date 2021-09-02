@@ -1,4 +1,4 @@
-// require mongoose models
+// Exercise and User Models
 const Exercise = require("../models/exercise");
 const User = require("../models/user");
 
@@ -17,7 +17,6 @@ exports.getUserLog = (req, res, next) => {
   User.findById(req.params["_id"], (err, user) => {
     if (err) return next(err);
     const { limit, from, to } = req.query;
-    console.log(`from: ${from}, to: ${to}`);
     // convert to UTC string if valid date
     let fromTime =
       new Date(from).toString() === "Invalid Date"
@@ -27,8 +26,6 @@ exports.getUserLog = (req, res, next) => {
       new Date(to).toString() === "Invalid Date"
         ? ""
         : new Date(to).toUTCString();
-
-    console.log(`from: ${fromTime}, to: ${toTime}`);
 
     // filter object for query
     const filter = { user: user._id };
@@ -45,8 +42,6 @@ exports.getUserLog = (req, res, next) => {
         filter.date["$lte"] = toTime;
       }
     }
-
-    console.log(filter);
 
     Exercise.find(filter, "description duration date")
       .limit(Number(limit))

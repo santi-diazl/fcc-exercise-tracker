@@ -1,4 +1,4 @@
-// require modules
+// Required Modules
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -6,7 +6,7 @@ require("dotenv").config();
 const router = require("./routes");
 const morgan = require("morgan");
 
-// mount middleware
+// Middleware mounting
 app.use(cors());
 app.use(express.static("public"));
 app.use(express.json());
@@ -25,15 +25,17 @@ mongoose.connect(MONGO_URI, {
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-// routing
-// main page
+// Routing
+
+// Main page
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
-// api
+// API
 app.use("/api/users", router);
 
-// listener
+
+// Listener
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });

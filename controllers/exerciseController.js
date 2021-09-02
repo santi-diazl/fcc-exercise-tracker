@@ -10,7 +10,6 @@ exports.addNewExercise = [
   // process request
   (req, res, next) => {
     const _id = req.params._id;
-    console.log(`User ID entered was ${_id}, desc: ${req.body.description}, duration: ${req.body.duration}`)
     
     User.findById(_id, (err, user) => {
       if (err) return next(err);
@@ -19,7 +18,6 @@ exports.addNewExercise = [
         err.status = 404;
         return next(err);
       }
-      console.log(`User found with ID ${user._id} and username ${user.username}`);
       const exercise = new Exercise({
         user: _id,
         description: req.body.description,
@@ -27,7 +25,6 @@ exports.addNewExercise = [
         date: !req.body.date ? undefined : req.body.date,
       });
   
-      console.log(`exercise information: user ${exercise.user}, entered at ${new Date().toLocaleTimeString()}`);  
       // now we can save exercise document
       exercise.save((err, exercise) => {
         if (err) {

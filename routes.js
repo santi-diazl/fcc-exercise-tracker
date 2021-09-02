@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// require controllers
+// Controllers
 const exerciseController = require("./controllers/exerciseController");
 const userController = require("./controllers/userController");
 const logController = require("./controllers/logController");
@@ -10,10 +10,8 @@ const logController = require("./controllers/logController");
 router.get("/", userController.getUserList);
 // POST - new user
 router.post("/", userController.addNewUser);
-
 // POST - new exercise
 router.post("/:_id/exercises", exerciseController.addNewExercise);
-
 // GET - exercise log
 router.get("/:_id/logs", logController.getUserLog);
 
