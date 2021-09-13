@@ -1,6 +1,6 @@
 // Exercise and User Models
-const Exercise = require("../models/exercise");
-const User = require("../models/user");
+const Exercise = require('../models/exercise');
+const User = require('../models/user');
 
 // Handle GET user's log of exercises
 // You can make a GET request to /api/users/:_id/logs to retrieve a full exercise log of any user.
@@ -14,52 +14,52 @@ const User = require("../models/user");
 // [ ] = optional
 // from, to = dates (yyyy-mm-dd); limit = number
 exports.getUserLog = (req, res, next) => {
-  User.findById(req.params["_id"], (err, user) => {
+  User.findById(req.params['_id'], (err, user) => {
     if (err) return next(err);
-    const { limit, from, to } = req.query;
+    const {limit, from, to} = req.query;
     // convert to UTC string if valid date
-    let fromTime =
-      new Date(from).toString() === "Invalid Date"
-        ? ""
-        : new Date(from).toUTCString();
-    let toTime =
-      new Date(to).toString() === "Invalid Date"
-        ? ""
-        : new Date(to).toUTCString();
+    const fromTime =
+      new Date(from).toString() === 'Invalid Date' ?
+        '' :
+        new Date(from).toUTCString();
+    const toTime =
+      new Date(to).toString() === 'Invalid Date' ?
+        '' :
+        new Date(to).toUTCString();
 
     // filter object for query
-    const filter = { user: user._id };
+    const filter = {user: user._id};
 
     if (fromTime) {
       filter.date = {};
-      filter.date["$gte"] = fromTime;
+      filter.date['$gte'] = fromTime;
     }
     if (toTime) {
-      if (filter.hasOwnProperty("date")) {
-        filter.date["$lte"] = toTime;
+      if (filter.hasOwnProperty('date')) {
+        filter.date['$lte'] = toTime;
       } else {
         filter.date = {};
-        filter.date["$lte"] = toTime;
+        filter.date['$lte'] = toTime;
       }
     }
 
-    Exercise.find(filter, "description duration date")
-      .limit(Number(limit))
-      .exec((err, exercises) => {
-        if (err) return next(err);
-        const exerciseArr = Array.from(exercises).map((exercise) => {
-          return {
-            description: exercise.description,
-            duration: exercise.duration,
-            date: exercise.date_string,
-          };
+    Exercise.find(filter, 'description duration date')
+        .limit(Number(limit))
+        .exec((err, exercises) => {
+          if (err) return next(err);
+          const exerciseArr = Array.from(exercises).map((exercise) => {
+            return {
+              description: exercise.description,
+              duration: exercise.duration,
+              date: exercise.date_string,
+            };
+          });
+          res.json({
+            _id: user._id,
+            username: user.username,
+            count: exerciseArr.length,
+            log: exerciseArr,
+          });
         });
-        res.json({
-          _id: user._id,
-          username: user.username,
-          count: exerciseArr.length,
-          log: exerciseArr,
-        });
-      });
   });
 };
