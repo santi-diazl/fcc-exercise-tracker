@@ -29,7 +29,6 @@ const dateToUTC = (date) => {
 };
 
 const getDateRange = (id, from, to) => {
-  // filter object for query
   const dateRange = {user: id};
 
   if (from) {
@@ -37,7 +36,7 @@ const getDateRange = (id, from, to) => {
     dateRange.date['$gte'] = from;
   }
   if (to) {
-    if (dateRange.hasOwnProperty('date')) {
+    if (from) {
       dateRange.date['$lte'] = to;
     } else {
       dateRange.date = {};
@@ -53,7 +52,7 @@ const addToArray = (exercises) => {
     return {
       description: exercise.description,
       duration: exercise.duration,
-      date: exercise.date_string,
+      date: exercise.dateString,
     };
   });
   return arr;
@@ -79,9 +78,9 @@ exports.getUserLog = async (req, res, next) => {
   const exerciseLog = addToArray(exercises);
 
   res.json({
-    _id: id,
     username: user.username,
     count: exerciseLog.length,
+    _id: id,
     log: exerciseLog,
   });
 };

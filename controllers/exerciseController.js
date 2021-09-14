@@ -30,14 +30,14 @@ exports.postExercise = async (req, res, next) => {
     user: req.params._id,
     description: req.body.description,
     duration: req.body.duration,
-    date: !date ? undefined : date,
+    date: !date ? undefined : new Date(date),
   });
 
   res.json({
-    _id: user._id,
     username: user.username,
-    date: exercise.date_string,
-    duration: exercise.duration,
     description: exercise.description,
+    duration: exercise.duration,
+    date: exercise.dateString,
+    _id: user._id,
   });
 };
