@@ -1,4 +1,5 @@
 exports.errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
+  console.log('error handler invoked');
+  console.error(err);
+  res.status(err.status ? err.status : 500).send(err.message);
 };
