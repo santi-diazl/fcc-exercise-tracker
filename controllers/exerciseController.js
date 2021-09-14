@@ -1,10 +1,5 @@
-// Mongoose data models
+// Mongoose exercise model
 const Exercise = require('../models/exercise');
-
-// You can POST to /api/users/:_id/exercises
-// with form data description, duration, and optionally date.
-// If no date is supplied, the current date will be used.
-// The response returned will be the user object with the exercise fields added.
 
 // User controller
 const userController = require('./userController');

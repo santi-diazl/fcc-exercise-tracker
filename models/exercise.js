@@ -9,6 +9,7 @@ const ExerciseSchema = new Schema({
   date: {type: Date, default: new Date()},
 });
 
+// virtual field for JSON responses
 ExerciseSchema.virtual('dateString').get(function() {
   const date = this.date.toDateString();
   return date;

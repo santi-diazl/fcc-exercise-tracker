@@ -1,33 +1,22 @@
-// Exercise and User Models
+// Mongoose exercise model
 const Exercise = require('../models/exercise');
 
-// Exercise controller
+// User controller
 const userController = require('./userController');
-
-// Handle GET user's log of exercises
-// You can make a GET request to /api/users/:_id/logs
-// to retrieve a full exercise log of any user.
-// The returned response will be the user object with a log array of all the exercises added.
-// Each log item has the description, duration, and date properties.
-// A request to a user's log (/api/users/:_id/logs) returns an object
-// with a count property representing the number of exercises returned.
-
-// You can add from, to and limit parameters to a /api/users/:_id/logs request
-// to retrieve part of the log of any user. from and to are dates in yyyy-mm-dd format.
-// limit is an integer of how many logs to send back.
-// GET user's exercise log: GET /api/users/:_id/logs?[&from][&to][&limit]
-// [ ] = optional
-// from, to = dates (yyyy-mm-dd); limit = number
 
 const getUser = userController.getUser;
 const noUserErr = userController.noUser;
 
+// Converts date params into UTC strings for mongoose query if valid
+// Otherwise returns empty string
 const dateToUTC = (date) => {
   return new Date(date).toString() === 'Invalid Date' ?
         '' :
         new Date(date).toUTCString();
 };
 
+// Returns an object with user ID and from and to dates
+// Used for mongoose query
 const getDateRange = (id, from, to) => {
   const dateRange = {user: id};
 
@@ -47,6 +36,7 @@ const getDateRange = (id, from, to) => {
   return dateRange;
 };
 
+// Adds exercises from query result into an array, for JSON response
 const addToArray = (exercises) => {
   const arr = Array.from(exercises).map((exercise) => {
     return {
@@ -60,21 +50,27 @@ const addToArray = (exercises) => {
 
 exports.getUserLog = async (req, res, next) => {
   const id = req.params['_id'];
+  // await user query promise
   const user = await getUser(id);
 
+  // no user found
   if (!user) {
     return next(noUserErr(id));
   }
 
+  // deconstruction of params
   const {limit, from, to} = req.query;
 
+  // query filter based on from and to dates params
   const queryFilter = getDateRange(id, dateToUTC(from), dateToUTC(to));
 
+  // await exercise query promise
   const exercises = await Exercise
       .find(queryFilter, 'description duration date')
       .limit(Number(limit))
       .exec();
 
+  // if successful, add results to array
   const exerciseLog = addToArray(exercises);
 
   res.json({

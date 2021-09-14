@@ -6,6 +6,8 @@ require('dotenv').config();
 const router = require('./routes');
 const morgan = require('morgan');
 const errHandler = require('./errorHandler');
+const compression = require('compression');
+const helmet = require('helmet');
 
 // Mount middleware
 app.use(cors());
@@ -13,6 +15,8 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(morgan('tiny'));
+app.use(compression()); // Compress all routes
+app.use(helmet());
 
 // Mongoose Configuration
 const mongoose = require('mongoose');
@@ -26,7 +30,7 @@ mongoose.connect(MONGO_URI, {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-// Routing
+// Routes
 
 // Main page
 app.get('/', (req, res) => {
