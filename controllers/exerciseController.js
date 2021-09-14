@@ -1,43 +1,43 @@
-// require mongoose models
-const Exercise = require("../models/exercise");
-const User = require("../models/user");
+// Mongoose data models
+const Exercise = require('../models/exercise');
 
-//You can POST to /api/users/:_id/exercises with form data description, duration, and optionally date.
+// You can POST to /api/users/:_id/exercises
+// with form data description, duration, and optionally date.
 // If no date is supplied, the current date will be used.
 // The response returned will be the user object with the exercise fields added.
 
-exports.addNewExercise = [
-  // process request
-  (req, res, next) => {
-    const _id = req.params._id;
-    
-    User.findById(_id, (err, user) => {
-      if (err) return next(err);
-      if (!user) {
-        let err = new Error(`User ${_id} not found.`);
-        err.status = 404;
-        return next(err);
-      }
-      const exercise = new Exercise({
-        user: _id,
-        description: req.body.description,
-        duration: req.body.duration,
-        date: !req.body.date ? undefined : req.body.date,
-      });
-  
-      // now we can save exercise document
-      exercise.save((err, exercise) => {
-        if (err) {
-          return next(err);
-        }
-        res.json({
-          _id: user._id,
-          username: user.username,
-          date: exercise.date_string,
-          duration: exercise.duration,
-          description: exercise.description,
-        });
-      });
-    });
-  },
-];
+// User controller
+const userController = require('./userController');
+
+const getUser = userController.getUser;
+
+const noUserErr = userController.noUser;
+
+const saveExercise = async (e) => {
+  const newEx = await new Exercise(e).save();
+  return newEx;
+};
+
+exports.postExercise = async (req, res, next) => {
+  const id = req.params._id;
+  const date = req.body.date;
+  const user = await getUser(id);
+
+  if (!user) {
+    return next(noUserErr(id));
+  }
+  const exercise = await saveExercise({
+    user: req.params._id,
+    description: req.body.description,
+    duration: req.body.duration,
+    date: !date ? undefined : date,
+  });
+
+  res.json({
+    _id: user._id,
+    username: user.username,
+    date: exercise.date_string,
+    duration: exercise.duration,
+    description: exercise.description,
+  });
+};
