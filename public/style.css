@@ -57,3 +57,7 @@ code {
   background-color: #FFFEC4;
   padding: 2px;
 }
+
+li {
+  margin: 10px 0;
+}

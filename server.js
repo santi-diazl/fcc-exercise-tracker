@@ -15,12 +15,13 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(morgan('tiny'));
-app.use(compression()); // Compress all routes
+app.use(compression());
 app.use(helmet());
 
 // Mongoose Configuration
 const mongoose = require('mongoose');
-const MONGO_URI = process.env['MONGO_URI'];
+const devDBUri = 'mongodb+srv://sdiaz:RsNCFCZMH62RKPpH@sdiaz-cluster.n5kji.mongodb.net/exercise-tracker?retryWrites=true&w=majority';
+const MONGO_URI = process.env['MONGO_URI'] || devDBUri;
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
@@ -32,7 +33,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Routes
 
-// Main page
+// Home page
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
 });
